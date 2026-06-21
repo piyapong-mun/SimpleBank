@@ -1,0 +1,13 @@
+version: "2"
+sql:
+  - schema: "./db/migration/"
+    queries: "./db/queries/"
+    engine: "postgresql"
+    gen:
+      go:
+        package: "db"
+        out: "./db/sqlc"
+    database:
+      uri: "postgresql://root:mypassword@localhost:5558/simple_bank?sslmode=disable"
+    rules:
+      - sqlc/db-prepare
