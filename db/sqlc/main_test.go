@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
+	"github.com/piyapong-mun/simplebank/util"
 )
 
 var TestQueries *Queries
@@ -13,10 +14,16 @@ var TestDB *sql.DB
 
 func TestMain(m *testing.M) {
 
-	conn, err := sql.Open("postgres", "postgresql://root:mypassword@localhost:5558/simple_bank?sslmode=disable")
+	config, err := util.LoadConfig("./../..")
 	if err != nil {
 		panic(err)
 	}
+
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		panic(err)
+	}
+
 	TestDB = conn
 	TestQueries = New(conn)
 

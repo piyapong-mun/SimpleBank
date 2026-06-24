@@ -28,3 +28,13 @@ func RandomCurrency() string {
 	rand.Seed(time.Now().UnixNano())
 	return currencies[rand.Intn(len(currencies))]
 }
+
+// IsSupportedCurrency returns true if the currency is supported
+func IsSupportedCurrency(currency string) bool {
+	switch currency {
+	case "USD", "EUR", "THB":
+		return true
+	}
+	return false
+}
+

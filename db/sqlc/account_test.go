@@ -12,10 +12,10 @@ import (
 )
 
 func TestCreateAccount(t *testing.T) {
-	// This is a placeholder for your test function.
-	// You can implement your test logic here to test the CreateAccount function.
+	user := createRandomUser(t)
+
 	arg := CreateAccountParams{
-		Owner:    util.RandomString(15),
+		Owner:    user.Username,
 		Balance:  util.RandomNumber(1, 1000),
 		Currency: util.RandomCurrency(),
 	}
@@ -31,8 +31,10 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func createRandomAccount(t *testing.T) Account {
+	user := createRandomUser(t)
+
 	arg := CreateAccountParams{
-		Owner:    util.RandomString(15),
+		Owner:    user.Username,
 		Balance:  util.RandomNumber(1, 1000),
 		Currency: util.RandomCurrency(),
 	}
@@ -76,25 +78,25 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestListAccounts(t *testing.T) {
-	var acc_list []Account
+	var lastAccount Account
 	for i := 0; i < 10; i++ {
-		acc_list = append(acc_list, createRandomAccount(t))
+		lastAccount = createRandomAccount(t)
 	}
 
-	accounts, err := TestQueries.ListAccounts(context.Background(), ListAccountsParams{
+	arg := ListAccountsParams{
+		Owner:  lastAccount.Owner,
 		Limit:  5,
-		Offset: 5,
-	})
+		Offset: 0,
+	}
+
+	accounts, err := TestQueries.ListAccounts(context.Background(), arg)
 
 	require.NoError(t, err)
-	require.Len(t, accounts, 5)
+	require.NotEmpty(t, accounts)
 
 	for _, account := range accounts {
-		assert.NotEmpty(t, account)
-	}
-
-	for _, account := range acc_list {
-		clearAccount(t, account.ID)
+		require.NotEmpty(t, account)
+		require.Equal(t, lastAccount.Owner, account.Owner)
 	}
 }
 

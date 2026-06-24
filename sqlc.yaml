@@ -7,6 +7,7 @@ sql:
       go:
         package: "db"
         out: "./db/sqlc"
+        emit_interface: true
     database:
       uri: "postgresql://root:mypassword@localhost:5558/simple_bank?sslmode=disable"
     rules:

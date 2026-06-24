@@ -1,34 +1,34 @@
 package main
 
 import (
-	// "context"
 	"database/sql"
 	"log"
 
-	// Import your generated db package (replace with your actual module name)
-
-	// Import the postgres driver
 	_ "github.com/lib/pq"
-
-	util "github.com/piyapong-mun/simplebank/util"
+	db "github.com/piyapong-mun/simplebank/db/sqlc"
+	api "github.com/piyapong-mun/simplebank/server"
+	"github.com/piyapong-mun/simplebank/util"
 )
 
 func main() {
-	// ctx := context.Background()
 
-	// 1. Connect to your local Docker Postgres database
-	connStr := "postgresql://root:mypassword@localhost:5558/simple_bank?sslmode=disable"
-	conn, err := sql.Open("postgres", connStr)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatalf("Cannot connect to database: %v", err)
 	}
 	defer conn.Close()
 
-	// 2. Initialize the sqlc generated Queries struct
-	// queries := db.New(conn)
+	store := db.NewStore(conn)
+	server, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
 
-	println(util.RandomString(15))
-	println(util.RandomCurrency())
-	println(util.RandomNumber(1, 100))
+	server.Start(config.ServerAddress)
 
 }
