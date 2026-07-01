@@ -4,6 +4,7 @@ set -e # stop all execution if any command fails
 
 # run migrations
 echo "Running migrations..."
+source app.env
 ./migrate -database "postgresql://root:mypassword@postgres:5432/simple_bank?sslmode=disable" -path ./migration up
 
 # start the app
