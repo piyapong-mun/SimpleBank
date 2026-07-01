@@ -21,4 +21,4 @@ mock:
 test:
 	go test -v -cover ./...
 
-.PHONY: createdb dropdb runpostgres migrateup migratedown test generate migrateup1 migratedown1 server mock
+.PHONY: createdb dropdb runpostgres migrateup migratedown test generate migrateup1 migratedown1 server mock migrateawsup

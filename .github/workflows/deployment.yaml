@@ -13,12 +13,24 @@ jobs:
   build:
     # Runner
     runs-on: ubuntu-latest
-    environment: AWS
+    strategy:
+      matrix:
+        env_name: [AWS, APPENV]
+
+    environment: ${{ matrix.env_name }}
 
     # Step
     steps:
     # Action
     - uses: actions/checkout@v4
+
+    - name: Set up app.env
+      run: |
+        echo "$DB_DRIVER" > app.env
+        echo "$DB_SOURCE" >> app.env
+        echo "$SERVER_ADDRESS" >> app.env
+        echo "$SECRET_KEY" >> app.env
+        echo "$TOKEN_DURATION" >> app.env
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
