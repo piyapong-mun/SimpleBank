@@ -28,6 +28,7 @@ jobs:
         echo "$SERVER_ADDRESS" >> app.env
         echo "$SECRET_KEY" >> app.env
         echo "$TOKEN_DURATION" >> app.env
+        cat app.env
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
