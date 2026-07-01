@@ -13,11 +13,8 @@ jobs:
   build:
     # Runner
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env_name: [AWS, APPENV]
 
-    environment: ${{ matrix.env_name }}
+    environment: AWS
 
     # Step
     steps:
